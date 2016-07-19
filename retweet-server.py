@@ -1,8 +1,8 @@
 import os
 import tweepy
 from flask import Flask
-from two1.lib.wallet import Wallet
-from two1.lib.bitserv.flask import Payment
+from two1.wallet import Wallet
+from two1.bitserv.flask import Payment
 from retweet_settings import *
 
 app = Flask(__name__)
@@ -40,6 +40,16 @@ def favorite(tweet_id):
 def retweet(tweet_id):    
     res = api.retweet(tweet_id)
     return "Successfully retweeted by @%s (https://twitter.com/%s)" % (me.screen_name, me.screen_name)
+
+
+@app.route('/manifest')
+def docs():
+    '''
+    Serves the app manifest to the 21 crawler.
+    '''
+    with open('manifest.yaml', 'r') as f:
+        manifest_yaml = yaml.load(f)
+    return json.dumps(manifest_yaml)
 
 
 if __name__ == '__main__':
